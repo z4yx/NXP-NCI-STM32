@@ -642,6 +642,15 @@ bool NxpNci_ConfigureMode(unsigned char mode)
 #if defined P2P_SUPPORT || defined CARDEMU_SUPPORT
 	uint8_t NCIRouting[] = {0x21, 0x01, 0x07, 0x00, 0x01};
 	uint8_t NCISetConfig_NFCA_SELRSP[] = {0x20, 0x02, 0x04, 0x01, 0x32, 0x01, 0x00};
+	uint8_t NCISetConfig_NFCB[] = {
+		0x20, 0x02,
+		0x13, //length
+		0x04, //quantity
+		0x39, 0x04, 0x32, 0x19, 0x43, 0x35,  //LB_NFCID0
+		0x3A, 0x04, 0x54, 0x46, 0x22, 0x08,  //LB_APPLICATION_DATA
+		0x3C, 0x01, 0x01,                    //LB_ADC_FO
+		0x58, 0x01, 0x0A,                    //LI_FWI
+	};
 #endif
 
 	if(mode == 0) return NXPNCI_SUCCESS;
@@ -733,6 +742,15 @@ bool NxpNci_ConfigureMode(unsigned char mode)
 	if (NCISetConfig_NFCA_SELRSP[6] != 0x00)
 	{
 		NxpNci_HostTransceive(NCISetConfig_NFCA_SELRSP, sizeof(NCISetConfig_NFCA_SELRSP), Answer, sizeof(Answer), &AnswerSize);
+		if ((Answer[0] != 0x40) || (Answer[1] != 0x02) || (Answer[3] != 0x00)) return NXPNCI_ERROR;
+	}
+#endif
+
+	/* Setting NFCB config */
+#ifdef CARDEMU_SUPPORT
+	if (mode & NXPNCI_MODE_CARDEMU)
+	{
+		NxpNci_HostTransceive(NCISetConfig_NFCB, sizeof(NCISetConfig_NFCB), Answer, sizeof(Answer), &AnswerSize);
 		if ((Answer[0] != 0x40) || (Answer[1] != 0x02) || (Answer[3] != 0x00)) return NXPNCI_ERROR;
 	}
 #endif
