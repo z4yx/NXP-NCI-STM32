@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include "apdu.h"
 #include "tool.h"
 #include "Nfc.h"
 #include "ndef_helper.h"
@@ -439,9 +440,8 @@ void task_nfc_reader(NxpNci_RfIntf_t RfIntf)
 #ifdef CARDEMU_RAW_EXCHANGE
 void PICC_ISO14443_4_scenario (void)
 {
-	unsigned char OK[] = {0x90, 0x00};
-	unsigned char OK1[] = {0x90, 0x01};
-	unsigned char OK2[] = {0x90, 0x02};
+	unsigned char Resp[256];
+	unsigned char RespSize;
 
 	unsigned char Cmd[256];
 	unsigned char CmdSize;
@@ -455,34 +455,23 @@ void PICC_ISO14443_4_scenario (void)
 		    for(int i=0;i<CmdSize;i++){
 		        printf("%02x ",Cmd[i]);
 		    }
-		    printf("\n");
-			if ((CmdSize >= 2) && (Cmd[0] == 0x00) && (Cmd[1] == 0xa4))
-			{
-				printf("Select AID received\n");
-				NxpNci_CardModeSend(OK, sizeof(OK));
-			}
-			else if ((CmdSize >= 4) && (Cmd[0] == 0x00) && (Cmd[1] == 0xb0))
-			{
-	            // process read binary here
-			}
-			else if ((CmdSize >= 4) && (Cmd[0] == 0x00) && (Cmd[1] == 0xd0))
-			{
-	            // process write binary here
-	            if(Cmd[3] == 0x00)
-	            {
-	            	lock = !lock;
-	            	lock ? NxpNci_CardModeSend(OK2, sizeof(OK2)) : NxpNci_CardModeSend(OK1, sizeof(OK1));
-	            }
-			}
-			else if ((CmdSize >= 3) && (Cmd[0] == 0x00) && (Cmd[1] == 0xfe))
+		    printf("\r\n");
+		    handleAPDU(Cmd, &CmdSize, Resp, &RespSize);
+		    printf("NxpNci_CardModeSend: ");
+		    for(int i=0;i<RespSize;i++){
+		        printf("%02x ",Resp[i]);
+		    }
+		    printf("\r\n");
+			if ((RespSize >= 2) )
 			{
 	            // return successful termination
-				NxpNci_CardModeSend(OK, sizeof(OK));
+				NxpNci_CardModeSend(Resp, RespSize);
 			}
 		}
 		else
 		{
 			printf("End of transaction\n");
+			resetAPDU();
 			return;
 		}
 	}

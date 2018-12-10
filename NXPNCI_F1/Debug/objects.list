@@ -21,6 +21,7 @@
 "NfcLibrary/NdefLibrary/src/RW_NDEF_T4T.o"
 "NfcLibrary/NdefLibrary/src/T4T_NDEF_emu.o"
 "NfcLibrary/NxpNci/src/NxpNci.o"
+"Src/apdu.o"
 "Src/main.o"
 "Src/ndef_helper.o"
 "Src/nfc_task.o"

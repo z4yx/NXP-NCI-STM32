@@ -51,8 +51,8 @@
 									<listOptionValue builtIn="false" value="__packed=__attribute__&quot;((__packed__))&quot;"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
 									<listOptionValue builtIn="false" value="STM32F103xB"/>
-									<listOptionValue builtIn="false" value="RW_SUPPORT"/>
-									<listOptionValue builtIn="false" value="P2P_SUPPORT"/>
+									<listOptionValue builtIn="false" value="noRW_SUPPORT"/>
+									<listOptionValue builtIn="false" value="noP2P_SUPPORT"/>
 									<listOptionValue builtIn="false" value="CARDEMU_SUPPORT"/>
 								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.638163611" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string"/>
@@ -111,8 +111,8 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration artifactName="NXPNCI_F1" configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="NXPNCI_F1"/>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/NXPNCI_F1"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
